@@ -1,0 +1,319 @@
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local player = Players.LocalPlayer
+local PlayerGui = player:WaitForChild("PlayerGui")
+
+local overlayGui = Instance.new("ScreenGui")
+overlayGui.Name = "LoadingOverlay"
+overlayGui.ResetOnSpawn = false
+overlayGui.DisplayOrder = 9999
+overlayGui.Parent = PlayerGui
+
+local overlayFrame = Instance.new("Frame")
+overlayFrame.Size = UDim2.new(1,0,1,0)
+overlayFrame.BackgroundColor3 = Color3.fromRGB(48, 0, 96)
+overlayFrame.BackgroundTransparency = 0.75
+overlayFrame.Parent = overlayGui
+
+local label = Instance.new("TextLabel")
+label.Size = UDim2.new(1,0,0,50)
+label.Position = UDim2.new(0,0,0.5,-25)
+label.BackgroundTransparency = 1
+label.Text = "made by team z4yk1dd"
+label.TextColor3 = Color3.fromRGB(230, 200, 255)
+label.Font = Enum.Font.GothamBold
+label.TextSize = 32
+label.TextStrokeColor3 = Color3.new(0,0,0)
+label.TextStrokeTransparency = 0.4
+label.Parent = overlayFrame
+
+delay(3, function()
+    local tween = TweenService:Create(overlayFrame, TweenInfo.new(2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 1})
+    tween:Play()
+    tween.Completed:Wait()
+    overlayGui:Destroy()
+end)
+
+local baseMap = {
+    a="а", b="ь", c="с", d="d", e="е", f="f", g="g", h="н", i="і", j="ј", k="к", l="l", m="м",
+    n="п", o="о", p="р", q="q", r="г", s="ѕ", t="т", u="υ", v="v", w="w", x="х", y="у", z="ｚ"
+}
+for i = 0, 9 do baseMap[tostring(i)] = tostring(i) end
+for _,sym in ipairs({"-","/","⁄",":",";","(",")","$","&","@","\"",".",",","?","!","'","[","]","{","}","#","%","^","*","+","=","_","\\","|","~","<",">","€","£","¥","•"}) do
+    baseMap[sym] = sym
+end
+
+local symbolList = {
+    utf8.char(0x2044), -- ⁄ Fraction slash (default)
+    utf8.char(0x2215), -- ∕ Division slash
+    utf8.char(0xFE32), -- ︲ Small vertical bar
+    utf8.char(0xFE68), -- ﹨ Small backslash
+    utf8.char(0x2E0F), -- ⸏ Paragraphos
+    utf8.char(0x02F8), -- ˸ Modifier letter raised colon
+    utf8.char(0x02D0), -- ː Modifier letter triangular colon
+    utf8.char(0x204A), -- ⁊ Tironian et
+    utf8.char(0x02D8), -- ˘ Breve
+    utf8.char(0x02C7), -- ˇ Caron
+    utf8.char(0x203F), -- ‿ Undertie
+    utf8.char(0x2040), -- ⁀ Character tie
+    utf8.char(0x204E), -- ⁎ Low asterisk
+    utf8.char(0x2051), -- ⁑ Two asterisks operator
+    utf8.char(0x2053), -- ⁓ Swung dash
+    utf8.char(0x2054), -- ⁔ Inverted undertie
+    utf8.char(0x2055), -- ⁕ Flower punctuation mark
+    utf8.char(0x2056), -- ⁖ Three dot punctuation
+    utf8.char(0x2057), -- ⁗ Quadruple prime
+    utf8.char(0x2058), -- ⁘ Four dot punctuation
+    utf8.char(0x1417), -- ᐧ Middle dot
+    utf8.char(0x203E), -- ‾ Overline
+    utf8.char(0x205D), -- ⁝ Tricolon
+    utf8.char(0x2027), -- ‧ Hyphenation point
+    utf8.char(0x2038), -- ‸ Caret punctuation
+    utf8.char(0xFE34), -- ︴ Presentation form wavy vertical line
+    utf8.char(0xFE35), -- ︵ Presentation form left parenthesis
+    utf8.char(0xFE36), -- ︶ Presentation form right parenthesis
+    utf8.char(0xFE37), -- ︷ Presentation form left curly bracket
+    utf8.char(0xFE38), -- ︸ Presentation form right curly bracket
+    utf8.char(0x2017), -- ‗ Double low line
+    utf8.char(0x2032), -- ′ Prime
+    utf8.char(0x2033), -- ″ Double prime
+    utf8.char(0x2035), -- ‵ Reversed prime
+    utf8.char(0x2036), -- ‶ Reversed double prime
+    utf8.char(0x2059), -- ⁙ Five dot punctuation
+    utf8.char(0x205A), -- ⁚ Two dot punctuation
+    utf8.char(0x205B), -- ⁛ Four dot mark
+    utf8.char(0x205C), -- ⁜ Dotted fence
+    utf8.char(0x205E), -- ⁞ Vertical ellipsis
+    utf8.char(0x2E3A), -- ⸺ Two-em dash
+    utf8.char(0x2E3B), -- ⸻ Three-em dash
+    utf8.char(0xFE31), -- ︱ Presentation form vertical line
+    utf8.char(0xFE32), -- ︲ Presentation form double vertical line
+    utf8.char(0xFE33), -- ︳ Presentation form vertical slash
+    utf8.char(0x2E3D), -- ⸽ Raised dot
+    utf8.char(0x2042), -- ⁂ Asterism
+    utf8.char(0x2022), -- • Bullet
+    utf8.char(0x2023), -- ‣ Triangular bullet
+    utf8.char(0x2043), -- ⁃ Hyphen bullet
+    utf8.char(0x2047), -- ⁇ Double question mark
+    utf8.char(0x2048), -- ⁈ Question exclamation mark
+    utf8.char(0x2E2E), -- ⸮ Reversed question mark
+    utf8.char(0x2E18), -- ⸘ Inverted interrobang
+    utf8.char(0x2E17), -- ⸗ Reversed interrobang
+    utf8.char(0x2E2C), -- ⸬ Raised interrobang
+    utf8.char(0x2E31), -- ⸱ Word separator middle dot
+    utf8.char(0x204F)  -- ⁏ Reversed semicolon
+}
+
+local selectedSymbol = symbolList[1]
+
+local function replaceLetters(input)
+    local result = ""
+    for i = 1, #input do
+        local char = input:sub(i,i)
+        local lowerChar = char:lower()
+        local rep = baseMap[lowerChar] or char
+        if char:match("%u") then rep = rep:upper() end
+        result = result .. rep .. selectedSymbol
+    end
+    return result
+end
+
+local screenGui, minimizedGui
+
+local function createGui()
+    screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "Z4YLookalikeGui"
+    screenGui.ResetOnSpawn = false
+    screenGui.DisplayOrder = 10
+    screenGui.Parent = PlayerGui
+
+    local frame = Instance.new("Frame")
+    frame.Name = "MainFrame"
+    frame.Size = UDim2.new(0, 370, 0, 180)
+    frame.Position = UDim2.new(0.5, -185, 0.5, -90)
+    frame.BackgroundColor3 = Color3.fromRGB(30,30,30)
+    frame.BorderSizePixel = 0
+    frame.Active = true
+    frame.Draggable = true
+    frame.Parent = screenGui
+
+    local title = Instance.new("TextLabel")
+    title.Text = "z4y bypasser"
+    title.Size = UDim2.new(1, 0, 0, 30)
+    title.BackgroundColor3 = Color3.fromRGB(20,20,20)
+    title.TextColor3 = Color3.new(1,1,1)
+    title.Font = Enum.Font.GothamBold
+    title.TextSize = 22
+    title.Parent = frame
+
+    local minBtn = Instance.new("TextButton")
+    minBtn.Text = "-"
+    minBtn.Size = UDim2.new(0, 30, 0, 30)
+    minBtn.Position = UDim2.new(1, -35, 0, 0)
+    minBtn.BackgroundColor3 = Color3.fromRGB(50,50,50)
+    minBtn.TextColor3 = Color3.new(1,1,1)
+    minBtn.Font = Enum.Font.GothamBold
+    minBtn.TextSize = 22
+    minBtn.Parent = frame
+
+    local inputBox = Instance.new("TextBox")
+    inputBox.PlaceholderText = "Type here..."
+    inputBox.Size = UDim2.new(1, -20, 0, 30)
+    inputBox.Position = UDim2.new(0, 10, 0, 40)
+    inputBox.BackgroundColor3 = Color3.fromRGB(50,50,50)
+    inputBox.TextColor3 = Color3.new(1,1,1)
+    inputBox.Font = Enum.Font.Gotham
+    inputBox.TextSize = 20
+    inputBox.ClearTextOnFocus = false
+    inputBox.Parent = frame
+
+    local outputLabel = Instance.new("TextLabel")
+    outputLabel.Text = ""
+    outputLabel.Size = UDim2.new(1, -20, 0, 50)
+    outputLabel.Position = UDim2.new(0, 10, 0, 80)
+    outputLabel.BackgroundColor3 = Color3.fromRGB(40,40,40)
+    outputLabel.TextColor3 = Color3.new(1,1,1)
+    outputLabel.Font = Enum.Font.Gotham
+    outputLabel.TextSize = 18
+    outputLabel.TextWrapped = true
+    outputLabel.Parent = frame
+
+    local copyBtn = Instance.new("TextButton")
+    copyBtn.Text = "Copy"
+    copyBtn.Size = UDim2.new(0, 70, 0, 30)
+    copyBtn.Position = UDim2.new(1, -80, 1, -40)
+    copyBtn.BackgroundColor3 = Color3.fromRGB(70,70,70)
+    copyBtn.TextColor3 = Color3.new(1,1,1)
+    copyBtn.Font = Enum.Font.GothamBold
+    copyBtn.TextSize = 18
+    copyBtn.Parent = frame
+
+    local dropdownBtn = Instance.new("TextButton")
+    dropdownBtn.Text = "Symbol: " .. selectedSymbol
+    dropdownBtn.Size = UDim2.new(0, 110, 0, 25)
+    dropdownBtn.Position = UDim2.new(0, 10, 0, 75)
+    dropdownBtn.BackgroundColor3 = Color3.fromRGB(60,60,60)
+    dropdownBtn.TextColor3 = Color3.new(1,1,1)
+    dropdownBtn.Font = Enum.Font.Gotham
+    dropdownBtn.TextSize = 18
+    dropdownBtn.Parent = frame
+
+    local dropdownOpen = false
+    local listFrame
+
+    local maxDropdownHeight = 200
+
+    local function toggleDropdown()
+        if dropdownOpen then
+            if listFrame then listFrame:Destroy() end
+            dropdownOpen = false
+        else
+            listFrame = Instance.new("Frame")
+            listFrame.Size = UDim2.new(0, 110, 0, maxDropdownHeight)
+            listFrame.Position = UDim2.new(0, 10, 0, 100)
+            listFrame.BackgroundColor3 = Color3.fromRGB(60,60,60)
+            listFrame.BorderSizePixel = 0
+            listFrame.ClipsDescendants = true
+            listFrame.Parent = frame
+
+            local scrollingFrame = Instance.new("ScrollingFrame")
+            scrollingFrame.Size = UDim2.new(1, 0, 1, 0)
+            scrollingFrame.CanvasSize = UDim2.new(0, 0, 0, #symbolList * 25)
+            scrollingFrame.ScrollBarThickness = 6
+            scrollingFrame.BackgroundTransparency = 1
+            scrollingFrame.Parent = listFrame
+
+            for i,symb in ipairs(symbolList) do
+                local btn = Instance.new("TextButton")
+                btn.Size = UDim2.new(1, 0, 0, 25)
+                btn.Position = UDim2.new(0, 0, 0, (i-1)*25)
+                btn.BackgroundColor3 = Color3.fromRGB(80,80,80)
+                btn.TextColor3 = Color3.new(1,1,1)
+                btn.Font = Enum.Font.Gotham
+                btn.TextSize = 18
+                btn.Text = symb
+                btn.Parent = scrollingFrame
+                btn.MouseButton1Click:Connect(function()
+                    selectedSymbol = symb
+                    dropdownBtn.Text = "Symbol: " .. selectedSymbol
+                    outputLabel.Text = replaceLetters(inputBox.Text)
+                    toggleDropdown()
+                end)
+            end
+
+            dropdownOpen = true
+        end
+    end
+
+    dropdownBtn.MouseButton1Click:Connect(toggleDropdown)
+
+    inputBox:GetPropertyChangedSignal("Text"):Connect(function()
+        outputLabel.Text = replaceLetters(inputBox.Text)
+    end)
+
+    copyBtn.MouseButton1Click:Connect(function()
+        if setclipboard then
+            setclipboard(outputLabel.Text)
+        end
+    end)
+
+    minBtn.MouseButton1Click:Connect(function()
+        screenGui:Destroy()
+        if dropdownOpen and listFrame then listFrame:Destroy() end
+        createMinimizedBtn()
+    end)
+end
+
+function createMinimizedBtn()
+    minimizedGui = Instance.new("ScreenGui")
+    minimizedGui.Name = "Z4YMinimizedBtn"
+    minimizedGui.ResetOnSpawn = false
+    minimizedGui.DisplayOrder = 10
+    minimizedGui.Parent = PlayerGui
+
+    local btn = Instance.new("TextButton")
+    btn.Text = "z4y"
+    btn.Size = UDim2.new(0, 50, 0, 50)
+    btn.Position = UDim2.new(0, 20, 0.5, -25)
+    btn.BackgroundColor3 = Color3.fromRGB(30,30,30)
+    btn.TextColor3 = Color3.new(1,1,1)
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 20
+    btn.Parent = minimizedGui
+
+    local dragging, dragInput, dragStart, startPos
+
+    btn.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            dragStart = input.Position
+            startPos = btn.Position
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+
+    btn.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement then
+            dragInput = input
+        end
+    end)
+
+    UserInputService.InputChanged:Connect(function(input)
+        if input == dragInput and dragging then
+            local delta = input.Position - dragStart
+            btn.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        end
+    end)
+
+    btn.MouseButton1Click:Connect(function()
+        minimizedGui:Destroy()
+        createGui()
+    end)
+end
+
+createGui()
